@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="map.css">
+        
+        <style type="text/css">
+            /* Set a Size for our map container, the Google Map will take up 100% of this container */
+            #map {
+                width: 1262px;
+                height: 900px;
+                top:0px;
+                left:0px;
+                /*z-index: -1;*/
+            }
+        </style>
+        
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+        <!-- <label for="entertainment"</label><input type="checkbox" id="entertainment" > Entertainment<br> -->
+        <label class="Checkbox_Entertainment">
+            <input type="checkbox" id="entertainment" checked=true > Entertainment<br>
+        </label>
+        <label class="Checkbox_cultural">
+            <input type="checkbox" id="cultural" checked=true> Cultural<br>
+        </label>
+        <label class="Checkbox_Education">
+            <input type="checkbox" id="education" checked=true> Educative<br>
+        </label>
+        <label class="Checkbox_Other">
+            <input type="checkbox" id="Other" checked=true> Other<br>
+        </label>
+        <div class="box"></div>
+        
+        <div class="header" id="header1"></div>
+         <div id='language'>
+            <p>Tr/En</p>
+        </div>
+
+        <div id='event_map'>
+            <p>Event Map</p>
+        </div>
+
+        <div id='About'>
+            <p>About</p>
+        </div>
+
+        <div id='Contact'>
+            <p>Contact</p>
+        </div>
+
+        <div id='Login'>
+            <p>Login</p>
+        </div>
+
+        <div id='EventAttenders'>
+            <p>Number of Event Attenders</p>
+        </div>
+
+        <div id='PeopleDensity'>
+            <p>People Density</p>
+        </div>
+
+        <div id='Noise'>
+            <p>Noise</p>
+        </div>
+
+        <div id='Physicalchaos'>
+            <p>Physical Chaos</p>
+        </div>
+
+        <div id='Price'>
+            <p>Price</p>
+        </div>
+
+       
+        <label class="range1">
+        <input id="range1" type="range" min="0" max="50" value="50" step="5" onchange="filterAttenders(this.value)" />
+        </label>
+
+        <label class="range2">
+        <input id="range2" type="range" min="0" max="3" value="3" step="1" onchange="filterDensity(this.value)"/>
+        </label>
+
+        <label class="range3">
+        <input type="range" min="0" max="100" value="70" step="5"/>
+        </label>
+
+        <label class="range4">
+        <input type="range" min="0" max="50" value="20" step="5"  />
+        </label>
+
+        <label class="range5">
+        <input type="range" min="0" max="100" value="80" step="5" />
+        </label>
+        <!-- <span id="range">0</span> -->
+
+        <script type="text/javascript">
+
+            function filterAttenders(newValue)
+            {
+                markers.forEach(mark=>{
+                    if(mark.length<=newValue && document.getElementById(mark.name).checked==true && document.getElementById("range2").value==mark.density1){
+                        mark.setVisible(true);
+                    }else if(mark.length>newValue){
+                        mark.setVisible(false);
+                    }
+                })
+            }
+
+            function filterDensity (newValue)
+            {   console.log("dddddddddddd "+newValue);
+               markers.forEach(mark=>{
+                    // vconsole.log("****************   "+mark.density1);
+                    if(mark.length<=document.getElementById("range1").value && document.getElementById(mark.name).checked==true  && mark.density1==newValue){
+                        mark.setVisible(true);
+                    }else if(mark.density1 !== newValue){
+                        mark.setVisible(false);
+                    }
+                }) 
+            }
+            // When the window has finished loading create our google map below
+            // var locations=[];
+            var markers=[];
+            // locations.push({latitude: 41.205631, longitude: 29.079545, type: 'educative'});
+            // locations.push({latitude: 41.111517, longitude: 29.034662, type: 'entertainment'});
+            // locations.push({latitude: 41.113106, longitude: 29.049997, type: 'cultural'});
+            // locations.push({latitude: 41.129970, longitude: 29.024742, type: 'other'});
+
+        var locations=[{"Event":"Club Blanco","Category":"Entertainment","latitude":41.008238,"longitude":28.978359,"Size":50,"density":3},
+            {"Event":"CUE Istiklal","Category":"Entertainment","latitude":41.032177,"longitude":28.978021,"Size":15,"density":2},
+            {"Event":"Jolly Joker İstanbul","Category":"Entertainment","latitude":41.008238,"longitude":28.978359,"Size":15,"density":3},
+            {"Event":"Date Istanbul","Category":"Entertainment","latitude":41.028785,"longitude":28.973908,"Size":50,"density":1},
+            {"Event":"Pera Film / Pera Müzesi-Museum","Category":"Entertainment","latitude":41.013307,"longitude":28.96249,"Size":30,"density":2},
+            {"Event":"Karınca Kısa Film Sineması","Category":"Entertainment","latitude":41.008238,"longitude":28.978359,"Size":30,"density":1},
+            {"Event":"City's Nişantaşı","Category":"Entertainment","latitude":41.051486,"longitude":28.991652,"Size":15,"density":2},
+            {"Event":"babil.com","Category":"Entertainment","latitude":41.032236,"longitude":29.031938,"Size":15,"density":1},
+            {"Event":"Reina","Category":"Entertainment","latitude":41.050109,"longitude":29.032379,"Size":50,"density":3},
+            {"Event":"DOKU İSTANBUL","Category":"Cultural","latitude":41.051793,"longitude":28.999882,"Size":30,"density":1},
+            {"Event":"KİBELE SANAT GALERİSİ","Category":"Cultural","latitude":41.008238,"longitude":28.978359,"Size":15,"density":2},
+            {"Event":"RENART ","Category":"Cultural","latitude":41.048656,"longitude":28.994518,"Size":30,"density":1},
+            {"Event":"GALERİ EKSEN","Category":"Cultural","latitude":41.04698,"longitude":28.994051,"Size":15,"density":3},
+            {"Event":"PROJE 4L","Category":"Cultural","latitude":41.124309,"longitude":29.011076,"Size":50,"density":1},
+            {"Event":"ART 350","Category":"Cultural","latitude":40.97501,"longitude":29.051764,"Size":50,"density":2},
+            {"Event":"ART NEXT","Category":"Cultural","latitude":41.108679,"longitude":29.017385,"Size":15,"density":1},
+            {"Event":"ART 212","Category":"Cultural","latitude":41.074065,"longitude":28.973883,"Size":30,"density":2},
+            {"Event":"AVUSTURYA KÜLTÜR OFİSİ","Category":"Cultural","latitude":41.126226,"longitude":29.070247,"Size":50,"density":3},
+            {"Event":"BAKRAÇ SANAT GALERİSİ","Category":"Cultural","latitude":40.980141,"longitude":29.08227,"Size":50,"density":2},
+            {"Event":"Galatasaray Üniversitesi","Category":"Educative","latitude":41.046512,"longitude":29.021331,"Size":15,"density":3},
+            {"Event":"YTÜ Harita Mühendisliği Yaldiz university","Category":"Educative","latitude":41.008238,"longitude":28.978359,"Size":15,"density":3},
+            {"Event":"Koc University","Category":"Educative","latitude":41.208339,"longitude":29.074961,"Size":15,"density":2},
+            {"Event":"Özgür Üniversite","Category":"Educative","latitude":40.979416,"longitude":28.735248,"Size":30,"density":1},
+            {"Event":"Akare Yurtdışı Eğitim Fuarları","Category":"Educative","latitude":41.023258,"longitude":28.972633,"Size":30,"density":2},
+            {"Event":"UHDK","Category":"Educative","latitude":41.045697,"longitude":29.019384,"Size":50,"density":1},
+            {"Event":"Oxford House Work and Travel","Category":"Educative","latitude":41.033704,"longitude":28.977182,"Size":30,"density":3},
+            {"Event":"Türk Kültür Vakfı - AFS Turkey","Category":"Educative","latitude":41.05184,"longitude":28.991562,"Size":15,"density":2},
+            {"Event":"Atölye Bilgi Adası","Category":"Educative","latitude":41.053513,"longitude":28.993585,"Size":30,"density":1},
+            {"Event":"İletişim Akademisi","Category":"Educative","latitude":41.032236,"longitude":29.031938,"Size":15,"density":3},
+            {"Event":"Sunset Vista II","Category":"Other","latitude":41.008238,"longitude":28.978359,"Size":50,"density":1},
+            {"Event":"Galata House","Category":"Other","latitude":41.008238,"longitude":28.978359,"Size":50,"density":2},
+            {"Event":"Isteniya Park","Category":"Other","latitude":41.111517,"longitude":29.034662,"Size":30,"density":3},
+            {"Event":"Grimm Tattoo","Category":"Other","latitude":41.028691,"longitude":28.973627,"Size":50,"density":1},
+            {"Event":"Lamar Zayıflama ve Yüz Bakım Merkezi","Category":"Other","latitude":41.124309,"longitude":29.011076,"Size":15,"density":1},
+            {"Event":"Taksim","Category":"Other","latitude":41.025269,"longitude":28.909594,"Size":30,"density":2},
+            {"Event":"Topkapı Palace","Category":"Other","latitude":41.010501,"longitude":28.982369,"Size":50,"density":3},
+            {"Event":"I Love Istanbul","Category":"Other","latitude":41.034089,"longitude":28.978664,"Size":15,"density":3},
+            {"Event":"Çengelköy Salon Nis Düğün Sarayı","Category":"Other","latitude":41.049523,"longitude":29.054904,"Size":15,"density":2},
+            {"Event":"Gülhane Parkı","Category":"Other","latitude":41.015567,"longitude":28.979702,"Size":30,"density":2}]
+
+            google.maps.event.addDomListener(window, 'load', init);
+           
+
+        
+            function init() {
+                // Basic options for a simple Google Map
+                // For more options see: https://developers.google.com/maps/documentation/javascript/reference#MapOptions
+                var mapOptions = {
+                    // How zoomed in you want the map to start at (always required)
+                    zoom: 12,
+
+
+                    // The latitude and longitude to center the map (always required)
+                    center: new google.maps.LatLng(41.0082, 28.9784), // Istanbul
+
+                    disableDefaultUI: true,
+
+                    // How you would like to style the map. 
+                    // This is where you would paste any style found on Snazzy Maps.
+                    styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#000000"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#000000"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":17},{"weight":1.2}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":21}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":17}]}]
+                };
+
+                // var excel = new ActiveXObject("Excel.Application");
+                // excel.Visible = false;
+                // var excel_file = excel.Workbooks.Open("/Volumes/D/KUSRP/proto-city data/Data");
+                // var excel_sheet = excel_file.Worksheets("Sheet1");
+                // var data = excel_sheet.Cells(1,1).Value;
+                // console.log(data);            
+
+                // Get the HTML DOM element that will contain your map 
+                // We are using a div with id="map" seen below in the <body>
+                var mapElement = document.getElementById('map');
+
+                // Create the Google Map using our element and options defined above
+                var map = new google.maps.Map(mapElement, mapOptions);
+                var lastZoom=map.getZoom();
+                
+                var content= "Event Deatils"
+
+                // var educative = new google.maps.MarkerImage(
+                //     'bigevent_middense.png',
+                //     null,  
+                //     null,  origin is 0,0 
+                //     null, /* anchor is bottom center of the scaled image */
+                //     new google.maps.Size(30, 30)
+                // ); 
+                
+//adding markers !!
+                locations.forEach(loc=>{
+                    if(loc.Category==='Educative'){
+                        if(loc.Size===50){
+                            if(loc.density===3){
+                                var image={
+                                    url: 'viz_all_layers_cs6-01.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+                                }
+                            }else if(loc.density===2){
+                                var image={
+                                    url: 'viz_all_layers_cs6-02.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+                                }
+                            }else if(loc.density===1){
+                                var image={
+                                    url: 'viz_all_layers_cs6-03.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+                                }
+                            }
+                        }else if(loc.Size===30){
+                            if(loc.density===3){
+                                var image={
+                                    url: 'viz_all_layers_cs6-04.png',
+                                    scaledSize: new google.maps.Size(30, 30),
+                                }
+                            }else if(loc.density===2){
+                                var image={
+                                    url: 'viz_all_layers_cs6-05.png',
+                                    scaledSize: new google.maps.Size(30, 30),
+                                }
+                            }else if(loc.density===1){
+                                var image={
+                                    url: 'viz_all_layers_cs6-06.png',
+                                    scaledSize: new google.maps.Size(30, 30),
+                                }
+                            }
+
+                        }else if(loc.Size===15){
+                            if(loc.density===3){
+                                var image={
+                                    url: 'viz_all_layers_cs6-07.png',
+                                    scaledSize: new google.maps.Size(15, 15),
+                                }
+                            }else if(loc.density===2){
+                                var image={
+                                    url: 'viz_all_layers_cs6-08.png',
+                                    scaledSize: new google.maps.Size(15, 15),
+                                }
+                            }else if(loc.density===1){
+                                var image={
+                                    url: 'viz_all_layers_cs6-09.png',
+                                    scaledSize: new google.maps.Size(15, 15),
+                                }
+                            }
+                        }
+                        var marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(loc.latitude, loc.longitude),
+                            map: map,
+                            icon: image,
+                            opacity: 1.0,
+                            id: 3,
+                            name:'education',
+                            content: loc.Event,
+                            length: loc.Size,
+                            density1: loc.density,
+                        }); 
+                        markers.push(marker);
+                    } else if(loc.Category==='Cultural'){
+                       if(loc.Size===50){
+                            if(loc.density===3){
+                                var image={
+                                    url: 'yellow_viz_all_layers_cs6-01.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+                                }
+                            }else if(loc.density===2){
+                                var image={
+                                    url: 'yellow_viz_all_layers_cs6-02.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+                                }
+                            }else if(loc.density===1){
+                                var image={
+                                    url: 'yellow_viz_all_layers_cs6-03.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+                                }
+                            }
+                        }else if(loc.Size===30){
+                            if(loc.density===3){
+                                var image={
+                                    url: 'yellow_viz_all_layers_cs6-04.png',
+                                    scaledSize: new google.maps.Size(30, 30),
+                                }
+                            }else if(loc.density===2){
+                                var image={
+                                    url: 'yellow_viz_all_layers_cs6-05.png',
+                                    scaledSize: new google.maps.Size(30, 30),
+                                }
+                            }else if(loc.density===1){
+                                var image={
+                                    url: 'yellow_viz_all_layers_cs6-06.png',
+                                    scaledSize: new google.maps.Size(30, 30),
+                                }
+                            }
+
+                        }else if(loc.Size===15){
+                            if(loc.density===3){
+                                var image={
+                                    url: 'yellow_viz_all_layers_cs6-07.png',
+                                    scaledSize: new google.maps.Size(15, 15),
+                                }
+                            }else if(loc.density===2){
+                                var image={
+                                    url: 'yellow_viz_all_layers_cs6-08.png',
+                                    scaledSize: new google.maps.Size(15, 15),
+                                }
+                            }else if(loc.density===1){
+                                var image={
+                                    url: 'yellow_viz_all_layers_cs6-09.png',
+                                    scaledSize: new google.maps.Size(15, 15),
+                                }
+                            }
+                        }
+                        var marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(loc.latitude, loc.longitude),
+                            map: map,
+                            icon: image,
+                            opacity: 1.0,
+                            id: 2,
+                            name:'cultural',
+                            content: loc.Event,
+                            length: loc.Size,
+                            density1: loc.density,
+                        }); 
+                        markers.push(marker);
+                    } else if(loc.Category==='Entertainment'){
+                        if(loc.Size===50){
+                            if(loc.density===3){
+                                var image={
+                                    url: 'orange_viz_all_layers_cs6-08-01.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+                                }
+                            }else if(loc.density===2){
+                                var image={
+                                    url: 'orange_viz_all_layers_cs6-08-02.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+                                }
+                            }else if(loc.density===1){
+                                var image={
+                                    url: 'orange_viz_all_layers_cs6-08-03.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+                                }
+                            }
+                        }else if(loc.Size===30){
+                            if(loc.density===3){
+                                var image={
+                                    url: 'orange_viz_all_layers_cs6-08-04.png',
+                                    scaledSize: new google.maps.Size(30, 30),
+                                }
+                            }else if(loc.density===2){
+                                var image={
+                                    url: 'orange_viz_all_layers_cs6-08-05.png',
+                                    scaledSize: new google.maps.Size(30, 30),
+                                }
+                            }else if(loc.density===1){
+                                var image={
+                                    url: 'orange_viz_all_layers_cs6-08-06.png',
+                                    scaledSize: new google.maps.Size(30, 30),
+                                }
+                            }
+
+                        }else if(loc.Size===15){
+                            if(loc.density===3){
+                                var image={
+                                    url: 'orange_viz_all_layers_cs6-08-07.png',
+                                    scaledSize: new google.maps.Size(15, 15),
+                                }
+                            }else if(loc.density===2){
+                                var image={
+                                    url: 'orange_viz_all_layers_cs6-08-08.png',
+                                    scaledSize: new google.maps.Size(15, 15),
+                                }
+                            }else if(loc.density===1){
+                                var image={
+                                    url: 'orange_viz_all_layers_cs6-08-09.png',
+                                    scaledSize: new google.maps.Size(15, 15),
+                                }
+                            }
+                        }
+                        var marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(loc.latitude, loc.longitude),
+                            map: map,
+                            icon: image,
+                            opacity: 1.0,
+                            id: 1,
+                            name:'entertainment',
+                            content: loc.Event,
+                            length: loc.Size,
+                            density1: loc.density,
+                        }); 
+                        markers.push(marker); 
+                    } else if(loc.Category==='Other'){
+                        if(loc.Size===50){
+                            if(loc.density===3){
+                                var image={
+                                    url: 'red_viz_all_layers_cs6-01.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+                                }
+                            }else if(loc.density===2){
+                                var image={
+                                    url: 'red_viz_all_layers_cs6-02.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+                                }
+                            }else if(loc.density===1){
+                                var image={
+                                    url: 'red_viz_all_layers_cs6-03.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+                                }
+                            }
+                        }else if(loc.Size===30){
+                            if(loc.density===3){
+                                var image={
+                                    url: 'red_viz_all_layers_cs6-04.png',
+                                    scaledSize: new google.maps.Size(30, 30),
+                                }
+                            }else if(loc.density===2){
+                                var image={
+                                    url: 'red_viz_all_layers_cs6-05.png',
+                                    scaledSize: new google.maps.Size(30, 30),
+                                }
+                            }else if(loc.density===1){
+                                var image={
+                                    url: 'red_viz_all_layers_cs6-06.png',
+                                    scaledSize: new google.maps.Size(30, 30),
+                                }
+                            }
+
+                        }else if(loc.Size===15){
+                            if(loc.density===3){
+                                var image={
+                                    url: 'red_viz_all_layers_cs6-07.png',
+                                    scaledSize: new google.maps.Size(15, 15),
+                                }
+                            }else if(loc.density===2){
+                                var image={
+                                    url: 'red_viz_all_layers_cs6-08.png',
+                                    scaledSize: new google.maps.Size(15, 15),
+                                }
+                            }else if(loc.density===1){
+                                var image={
+                                    url: 'red_viz_all_layers_cs6-09.png',
+                                    scaledSize: new google.maps.Size(15, 15),
+                                }
+                            }
+                        }
+                         var marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(loc.latitude, loc.longitude),
+                            map: map,
+                            icon: image,
+                            opacity: 1.0,
+                            id: 4,
+                            name:'Other',
+                            content: loc.Event,
+                            length: loc.Size,
+                            density1: loc.density,
+                        }); 
+                        markers.push(marker);
+                    }
+                });
+               
+//               
+
+//Conditions for checkbox selection
+            // markers.forEach(mark=>{
+                document.getElementById("entertainment").onchange=function(){
+                    if ( document.getElementById("entertainment").checked==true ) {
+                        markers.forEach(mark=>{
+                            if(mark.id===1 && mark.length<=document.getElementById("range1").value && document.getElementById("range2").value==mark.density1){
+                                mark.setVisible(true);
+                            }
+                        })
+                    }else if( document.getElementById("entertainment").checked==false) {
+                        markers.forEach(mark=>{
+                            if(mark.id===1){
+                                mark.setVisible(false);
+                            }
+                        })
+                    }
+                }
+                document.getElementById("cultural").onchange=function(){
+                    if ( document.getElementById("cultural").checked==true) {
+                        markers.forEach(mark=>{
+                            if(mark.id===2 && mark.length<=document.getElementById("range1").value && document.getElementById("range2").value==mark.density1 ){
+                                mark.setVisible(true);
+                            }
+                        })
+                    }else if( document.getElementById("cultural").checked==false) {
+                        markers.forEach(mark=>{
+                            if(mark.id===2){
+                                mark.setVisible(false);
+                            }
+                        })
+                    }
+                }
+                document.getElementById("education").onchange=function(){
+                    if ( document.getElementById("education").checked==true ) {
+                        markers.forEach(mark=>{
+                            if(mark.id===3 && mark.length<=document.getElementById("range1").value && document.getElementById("range2").value==mark.density1){
+                                mark.setVisible(true);
+                            }
+                        })
+                    }else if( document.getElementById("education").checked==false) {
+                        markers.forEach(mark=>{
+                            if(mark.id===3){
+                                // console.log("found");
+                                mark.setVisible(false);
+                            }
+                        })
+                    }
+                }
+                document.getElementById("Other").onchange=function(){
+                    if ( document.getElementById("Other").checked==true) {
+                        markers.forEach(mark=>{
+                            if(mark.id===4 && mark.length<=document.getElementById("range1").value && document.getElementById("range2").value==mark.density1 ){
+                                mark.setVisible(true);
+                            }
+                        })
+                    }else if( document.getElementById("Other").checked==false) {
+                        markers.forEach(mark=>{
+                            if(mark.id===4){
+                                // console.log("found");
+                                mark.setVisible(false);
+                            }
+                        })
+                    }
+                }
+            // });
+//                
+
+//On click marker event handling   
+    
+                 markers.forEach(mark=>{
+                    google.maps.event.addListener(mark, 'click', function () {
+                       mark.setOptions({
+                            strokeWeight: 6,
+                            strokeOpacity: 0.8,
+                        });
+                        var Loc = mark.getCenter();
+                        // console.log(mark.getCenter());
+                        // var INFO_WINDOW_WIDTH = 352;                                
+                        var infowindow = new google.maps.InfoWindow({
+                            position :Loc,
+                            content: mark.content,
+                            // maxWidth: INFO_WINDOW_WIDTH
+                        });
+                        infowindow.open(map,mark);
+                        google.maps.event.addListener(infowindow, 'closeclick', function(){
+                            mark.setOptions({
+                                strokeWeight: 0,
+                                strokeOpacity: 0.65,
+                            }); 
+                        });
+                    });
+
+                    // google.maps.event.addListener(map, 'zoom_changed', function() {
+                    //     console.log("idjidjasdhdhsadha"+lastZoom);
+                    //     var zoomScale=577790.576700;
+                    //     var newZoom=Math.pow(2,(map.getZoom()-1));
+                    //     var newScale=591657550.500000/newZoom;
+                    //     var lastZoomRatio=Math.pow(2,(lastZoom-1));
+                    //     var lastZoomScale=591657550.500000/lastZoomRatio;
+                    //     console.log(newScale);
+                    //     var newRadius=(mark.getRadius()*newScale)/lastZoomScale;
+                    //     mark.setRadius(newRadius);  
+                             
+                    // });
+                    lastZoom=map.getZoom(); 
+
+                });
+
+//
+
+               
+            }
+        </script>
+    </head>
+    <body>
+        <div id="map"></div>
+    </body>
+</html>

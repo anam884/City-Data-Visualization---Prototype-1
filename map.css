@@ -1,0 +1,215 @@
+body {
+    background-color: Grey;
+}
+
+.Checkbox_Entertainment{
+	position: absolute;
+	top: 80px;
+	left: 81%;
+	color: white;
+	z-index: 2;
+	font-family: 'Roboto';
+	font-size: 12px;
+
+	
+}
+
+/*.Checkbox_Entertainment[input[type=checkbox]:checked + label {
+    background: green;
+}*/
+.Checkbox_cultural{
+	position: absolute;
+	top: 100px;
+	left: 81%;
+	color: white;
+	z-index: 2;
+	font-family: 'Roboto';
+	font-size: 12px;
+
+	/*background-color: pink;*/
+}
+.Checkbox_Education{
+	position: absolute;
+	top: 120px;
+	left: 81%;
+	color: white;
+	z-index: 2;
+	font-family: 'Roboto';
+	font-size: 12px;
+	/*background-color: pink;*/
+}
+.Checkbox_Other{
+	position: absolute;
+	top: 140px;
+	left: 81%;
+	color: white;
+	z-index: 2;
+	font-family: 'Roboto';
+	font-size: 12px;
+
+	/*background-color: pink;*/
+}
+.box{ 
+  background-color: black;
+  position: absolute;
+  height: 80%;
+  width: 15%;
+  left: 79%;
+  top: 8%;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.header{
+  background-color: black;
+  position: absolute;
+  height: 6%;
+  width: 100%;
+  left: 0%;
+  top: 0%;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+#language{
+	color: white;
+	z-index: 2;
+	font-family: 'Roboto';
+	font-size: 12px;
+	position: absolute;
+	top: 1%;
+	left: 93%;
+}
+
+#event_map{
+	color: white;
+	z-index: 2;
+	font-family: 'Roboto';
+	font-size: 12px;
+	position: absolute;
+	top: 1%;
+	left: 3%;
+}
+#About{
+	color: white;
+	z-index: 2;
+	font-family: 'Roboto';
+	font-size: 12px;
+	position: absolute;
+	top: 1%;
+	left: 22%;
+}
+#Contact{
+	color: white;
+	z-index: 2;
+	font-family: 'Roboto';
+	font-size: 12px;
+	position: absolute;
+	top: 1%;
+	left: 30%;
+}
+#Login{
+	color: white;
+	z-index: 2;
+	font-family: 'Roboto';
+	font-size: 12px;
+	position: absolute;
+	top: 1%;
+	left: 38%;
+}
+
+#EventAttenders{
+	position: absolute;
+	top: 23%;
+	left: 81%;
+	color: white;
+	z-index: 2;
+	font-family: 'Roboto';
+	font-size: 12px;
+}
+
+#PeopleDensity{
+	position: absolute;
+	top: 30%;
+	left: 81%;
+	color: white;
+	z-index: 2;
+	font-family: 'Roboto';
+	font-size: 12px;
+}
+
+
+#Noise{
+	position: absolute;
+	top: 37%;
+	left: 81%;
+	color: white;
+	z-index: 2;
+	font-family: 'Roboto';
+	font-size: 12px;
+}
+
+
+#Physicalchaos{
+	position: absolute;
+	top: 44%;
+	left: 81%;
+	color: white;
+	z-index: 2;
+	font-family: 'Roboto';
+	font-size: 12px;
+}
+
+#Price{
+	position: absolute;
+	top: 51%;
+	left: 81%;
+	color: white;
+	z-index: 2;
+	font-family: 'Roboto';
+	font-size: 12px;
+}
+
+
+.range1{
+	position: absolute;
+	z-index: 2;
+	top: 27%;
+	left: 81%;
+	
+}
+
+.range2{
+	position: absolute;
+	z-index: 2;
+	top: 34%;
+	left: 81%;
+}
+
+.range3{
+	position: absolute;
+	z-index: 2;
+	top: 41%;
+	left: 81%;
+}
+
+.range4{
+	position: absolute;
+	z-index: 2;
+	top: 48%;
+	left: 81%;
+}
+
+.range5{
+	position: absolute;
+	z-index: 2;
+	top: 55%;
+	left: 81%;
+}
+
+
+
+
+
+
+
